@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramas Energéticos - Subsuelo Mexicano</title>
+    
+    <!-- Cargamos la librería Mermaid para renderizar los gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .diagram-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 40px;
+            overflow-x: auto; /* Permite scroll si el diagrama es muy ancho */
+        }
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            color: #2c3e50;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Análisis de Recursos y Sinergias</h1>
+        <p>Visualización del Subsuelo Mexicano y Ecosistema Tecnológico</p>
+    </header>
+
+    <!-- Diagrama 1: Flujo Lineal (Subsuelo) -->
+    <section class="diagram-container">
+        <h2>1. Cadena de Valor del Subsuelo</h2>
+        <div class="mermaid">
+graph TD
+    %% Definición de estilos para los nodos
+    classDef source fill:#2ecc71,stroke:#1e8449,color:#fff,stroke-width:2px;
+    classDef process fill:#3498db,stroke:#2874a6,color:#fff,stroke-width:2px;
+    classDef product fill:#f1c40f,stroke:#b7950b,color:#000,stroke-width:2px;
+    classDef market fill:#e74c3c,stroke:#922b21,color:#fff,stroke-width:2px;
+
+    %% Nivel 1: Fuentes (Subsuelo)
+    Subsuelo(["SUBSUELO MEXICANO<br/>(Petróleo, Gas, Calor, Litio, CO₂)"]):::source
+    
+    %% Nivel 2: Recursos Extraídos
+    Crudo["Petróleo Crudo"]:::source
+    GasNat["Gas Natural"]:::source
+    CalorGeo["Calor Geot."]:::source
+    LitioSal["Litio Salmuera"]:::source
+
+    %% Conexiones Subsuelo -> Recursos
+    Subsuelo --> Crudo
+    Subsuelo --> GasNat
+    Subsuelo --> CalorGeo
+    Subsuelo --> LitioSal
+
+    %% Nivel 3: Procesamiento Industrial
+    Refineria["REFINERÍA / BIOREFINERÍA<br/>(Co-procesamiento)"]:::process
+    PlantaGeo["Planta Geot."]:::process
+    PlantaLitio["Planta DLE Litio"]:::process
+
+    %% Conexiones Recursos -> Procesos
+    Crudo --> Refineria
+    GasNat --> Refineria
+    CalorGeo --> PlantaGeo
+    LitioSal --> PlantaLitio
+
+    %% Nivel 4: Productos
+    Gasolina["Gasolina / Diésel<br/>(declin.)"]:::product
+    SAF["SAF"]:::product
+    Hidrogeno["H₂"]:::product
+    CO2["CO₂"]:::product
+    Petroquim["Petroquímicos circ."]:::product
+    kWh["kWh base 24/7"]:::product
+    Li2CO3["Li₂CO₃"]:::product
+    LiOH["LiOH"]:::product
+
+    %% Conexiones Procesos -> Productos
+    Refineria --> Gasolina
+    Refineria --> SAF
+    Refineria --> Hidrogeno
+    Refineria --> CO2
+    Refineria --> Petroquim
+    PlantaGeo --> kWh
+    PlantaLitio --> Li2CO3
+    PlantaLitio --> LiOH
+
+    %% Nivel 5: Mercados y Usuarios Finales
+    subgraph Mercados ["MERCADOS Y USUARIOS FINALES"]
+        direction LR
+        Transp["Transporte / Exportación"]:::market
+        Aviacion["Aviación"]:::market
+        Indus["Industria / Fertil. / Construcc."]:::market
+        RedCFE["Red CFE / Comunidades"]:::market
+        Baterias["Baterías / VE"]:::market
+    end
+
+    %% Conexiones Productos -> Mercados
+    Gasolina --> Transp
+    SAF --> Aviacion
+    Hidrogeno --> Indus
+    CO2 --> Indus
+    Petroquim --> Indus
+    kWh --> RedCFE
+    Li2CO3 --> Baterias
+    LiOH --> Baterias
+        </div>
+    </section>
+
+    <!-- Diagrama 2: Sinergias (Simplificado para compatibilidad) -->
+    <section class="diagram-container">
+        <h2>2. Red de Sinergias (L1 - L8)</h2>
+        <div class="mermaid">
+graph TD
+    %% Estilos simplificados
+    classDef in fill:#d5f5e3,stroke:#1e8449;
+    classDef pro fill:#fcf3cf,stroke:#b7950b;
+    classDef out fill:#d6eaf8,stroke:#2874a6;
+    classDef sup fill:#ebdef0,stroke:#884ea0;
+
+    %% Nodos
+    L1(L1 Metano):::in
+    L6(L6 Geoenergia):::in
+    
+    L3(L3 Hidrogeno):::pro
+    L2(L2 CCUS):::pro
+    
+    L4(L4 Combustibles):::out
+    L5(L5 Petroquimica):::out
+    
+    L7(L7 Integracion):::sup
+    L8(L8 Infraestructura):::sup
+
+    %% Conexiones
+    L1 --> L3
+    L3 -.-> L2
+    L2 --> L3
+    L2 --> L4
+    L3 --> L4
+    L3 --> L5
+    L2 --> L5
+    L5 -.-> L1
+    L6 --> L3
+    L6 --> L7
+    L1 -.-> L7
+    L7 --> L3
+    L7 --> L4
+    L8 -.-> L1
+    L8 -.-> L3
+    L8 -.-> L4
+        </div>
+        <p><em>Leyenda: Línea sólida = Flujo directo. Línea punteada = Intercambio de servicios o retroalimentación.</em></p>
+    </section>
+
+    <!-- Script para inicializar Mermaid -->
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+    </script>
+
+</body>
+</html>
