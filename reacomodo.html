@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis: Reestructuración Pemex 2025-2027</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pemex-dark: #1a1a1a;
+            --logo-green: #2a8f3d;
+            --logo-red: #c1272d;
+            --logo-silver: #cfcfcf;
+            --bg-light: #f4f7f6;
+            --accent-gold: #b38e5d;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--pemex-dark);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--pemex-dark) 0%, #333 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--logo-green);
+        }
+
+        .logo-main {
+            max-width: 120px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            color: var(--logo-red);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: -40px auto 40px;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        section {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        section:last-child { border: none; }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--logo-green);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-left: 5px solid var(--logo-red);
+            padding-left: 15px;
+        }
+
+        .date-badge {
+            background: var(--pemex-dark);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--logo-red);
+            font-weight: bold;
+        }
+
+        .alert-box {
+            background: #fff5f5;
+            border: 2px solid var(--logo-red);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border-top: 4px solid var(--logo-green);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: var(--pemex-dark);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .status-optimista { color: #27ae60; font-weight: bold; }
+        .status-intermedio { color: #f39c12; font-weight: bold; }
+        .status-critico { color: #c0392b; font-weight: bold; }
+
+        .final-quote {
+            background: var(--logo-green);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-family: 'Montserrat', sans-serif;
+            font-style: italic;
+            border-radius: 12px;
+            margin-top: 50px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .container { padding: 20px; margin: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logountypp.jpeg" alt="Logotipo UNTyPP" class="logo-main">
+    <h1>Reacomodo en Pemex Acuerdo CMC/046/25 </h1>
+    <span class="subtitle">¿Modernización o desmantelamiento laboral?</span>
+</header>
+
+<div class="container">
+    
+    <section>
+        <h2>1️⃣ Qué dice el Acuerdo CMC/046/25</h2>
+        <div class="date-badge">🗓️ 22 de septiembre de 2025 – Página 234 del CCT</div>
+        <ul>
+            <li><strong>A partir del 20 de octubre de 2025:</strong> Revisión conjunta (Pemex + STPRM) de estructuras organizacionales.</li>
+            <li><strong>En 60 días hábiles:</strong> Deben definir si hay o no materia de trabajo en cada centro.</li>
+            <li><strong>Enero a marzo 2026:</strong> Reuniones regionales para decidir reubicaciones, jubilaciones o liquidaciones.</li>
+            <li><strong>Ejecución:</strong> 90 días hábiles para aplicar decisiones (Cláusula 20).</li>
+            <li><strong>Tercerización:</strong> Análisis de trabajos por terceros (Cláusula 34).</li>
+        </ul>
+        <p style="background: #eee; padding: 15px; border-radius: 5px; font-weight: 600;">
+            📄 Traducción práctica: Pemex y el sindicato acordaron revisar quién sí y quién no tiene “trabajo efectivo” para la empresa.
+        </p>
+    </section>
+
+    <section>
+        <h2>2️⃣ Qué significa “sin materia de trabajo”</h2>
+        <div class="alert-box">
+            <p><strong>⚠️ Definición Crítica:</strong> Es una figura que permite separar personal alegando falta de funciones reales o carga productiva.</p>
+            <ul>
+                <li><strong>Efecto directo:</strong> Justifica despidos, jubilaciones forzadas o liquidaciones “legales”.</li>
+                <li><strong>Efecto estructural:</strong> Abre la puerta a reducir plazas y reorganizar áreas completas.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <h2>3️⃣ Las implicaciones laborales</h2>
+        <div class="highlight-grid">
+            <div class="card">
+                <strong>💣 Zozobra</strong>
+                <p>Clima de desconfianza y miedo entre trabajadores sindicalizados.</p>
+            </div>
+            <div class="card">
+                <strong>🤝 Aval Sindical</strong>
+                <p>El STPRM queda comprometido en las decisiones de recorte.</p>
+            </div>
+            <div class="card">
+                <strong>💼 Presión de Base</strong>
+                <p>Riesgo de jubilaciones anticipadas y pérdida de derechos.</p>
+            </div>
+            <div class="card" style="border-top-color: var(--logo-red);">
+                <strong>📉 Precedente</strong>
+                <p>Riesgo inminente para personal técnico o de confianza (UNTyPP).</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>4️⃣ Repercusiones estructurales</h2>
+        <ul>
+            <li><strong>Eficiencia forzada:</strong> Menos personal operativo y mayor automatización.</li>
+            <li><strong>Mecánica Financiera:</strong> Uso de jubilaciones para reducir el pasivo laboral.</li>
+            <li><strong>Outsourcing interno:</strong> Mayor facilidad para la subcontratación de terceros.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>5️⃣ Lo que está en juego</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
+            <span style="background: #2a8f3d22; padding: 8px 15px; border-radius: 4px; border: 1px solid var(--logo-green);">⚖️ Soberanía Laboral</span>
+            <span style="background: #2a8f3d22; padding: 8px 15px; border-radius: 4px; border: 1px solid var(--logo-green);">🧠 Capacidades Técnicas</span>
+            <span style="background: #2a8f3d22; padding: 8px 15px; border-radius: 4px; border: 1px solid var(--logo-green);">🌍 Transición Energética</span>
+            <span style="background: #2a8f3d22; padding: 8px 15px; border-radius: 4px; border: 1px solid var(--logo-green);">✊ Modelo de Transición</span>
+        </div>
+    </section>
+
+    <section>
+        <h2>6️⃣ Escenarios 2025–2027</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Escenario</th>
+                    <th>Qué ocurre</th>
+                    <th>Riesgos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="status-optimista">🟢 Optimista</td>
+                    <td>Reubicaciones dignas y diálogo real.</td>
+                    <td>Depende de voluntad política.</td>
+                </tr>
+                <tr>
+                    <td class="status-intermedio">🟡 Intermedio</td>
+                    <td>Recorte parcial en áreas no rentables.</td>
+                    <td>Descontento laboral.</td>
+                </tr>
+                <tr>
+                    <td class="status-critico">🔴 Crítico</td>
+                    <td>Despidos y outsourcing masivo.</td>
+                    <td>Crisis en Pemex y pérdida de soberanía.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div class="final-quote">
+        “El futuro de Pemex no se decide solo en los contratos, sino en la defensa colectiva del trabajo como base de la soberanía energética.”
+    </div>
+
+</div>
+
+<footer>
+    &copy; 2025 Análisis de Reestructuración Energética - UNTyPP
+</footer>
+
+</body>
+</html>
