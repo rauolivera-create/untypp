@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vectores de Expansión - PEMEX Transición Energética</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --pemex-green: #00843D;
+            --pemex-gold: #C8A951;
+            --cfe-blue: #003B71;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0f1a 0%, #111827 50%, #0d1526 100%);
+            color: #e5e7eb;
+            font-family: 'Inter', system-ui, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .glassmorphism {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .diamond-shadow {
+            box-shadow: 0 0 60px rgba(34, 197, 94, 0.15), 0 0 120px rgba(234, 179, 8, 0.1);
+        }
+        
+        .vector-card {
+            transition: all 0.3s ease;
+        }
+        
+        .vector-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(34, 197, 94, 0.3);
+            box-shadow: 0 10px 40px rgba(34, 197, 94, 0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #22c55e 0%, #eab308 50%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+        
+        .pulse-animation {
+            animation: pulse-ring 3s ease-in-out infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .rotate-slow {
+            animation: rotate 20s linear infinite;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(17, 24, 39, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(34, 197, 94, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(34, 197, 94, 0.5);
+        }
+        
+        .nav-item {
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover {
+            transform: translateX(4px);
+        }
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(34, 197, 94, 0.2), rgba(234, 179, 8, 0.1));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .timeline-line {
+            background: linear-gradient(90deg, #3b82f6, #22c55e, #eab308);
+        }
+        
+        .expand-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .expand-content.expanded {
+            max-height: 1000px;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="fixed left-0 top-0 h-screen w-64 glassmorphism border-r border-white/10 flex flex-col z-50">
+            <div class="p-6 border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-lg overflow-hidden bg-white/10 flex items-center justify-center">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='%2322c55e' stroke-width='2'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="Logo" class="w-8 h-8">
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg text-white">UNTYPP</h1>
+                        <p class="text-xs text-gray-400">Transición Energética</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 p-4 space-y-2">
+                <button onclick="showSection('diamante')" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-green-400" data-section="diamante">
+                    <i data-lucide="diamond" class="w-5 h-5"></i>
+                    <span class="text-sm font-medium">Proyectos TE</span>
+                </button>
+                <button onclick="showSection('vectores')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-400 hover:text-white hover:bg-white/5" data-section="vectores">
+                    <i data-lucide="compass" class="w-5 h-5"></i>
+                    <span class="text-sm font-medium">Vectores de Expansión</span>
+                </button>
+                <button onclick="showSection('comparativa')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-400 hover:text-white hover:bg-white/5" data-section="comparativa">
+                    <i data-lucide="git-compare" class="w-5 h-5"></i>
+                    <span class="text-sm font-medium">Modelo 2013 vs 2024</span>
+                </button>
+                <button onclick="showSection('hoja-ruta')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-400 hover:text-white hover:bg-white/5" data-section="hoja-ruta">
+                    <i data-lucide="calendar-range" class="w-5 h-5"></i>
+                    <span class="text-sm font-medium">Hoja de Ruta</span>
+                </button>
+                <button onclick="showSection('modelo')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-400 hover:text-white hover:bg-white/5" data-section="modelo">
+                    <i data-lucide="building-2" class="w-5 h-5"></i>
+                    <span class="text-sm font-medium">Modelo de Negocio</span>
+                </button>
+                <button onclick="showSection('riesgos')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left text-gray-400 hover:text-white hover:bg-white/5" data-section="riesgos">
+                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                    <span class="text-sm font-medium">Análisis de Riesgos</span>
+                </button>
+            </nav>
+            
+            <div class="p-4 border-t border-white/10">
+                <p class="text-xs text-gray-500 text-center">PEMEX Transición Energética 2026-2035</p>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="ml-64 flex-1 p-6">
+            <!-- Header -->
+            <header class="glassmorphism rounded-2xl p-4 mb-6 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-white">Vectores de Expansión de Negocios Bajos en Carbono</h1>
+                    <p class="text-gray-400 text-sm mt-1">Proyectos Transición Energética (en definición)</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs text-gray-400">Análisis Multidisciplinario</span>
+                    <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                </div>
+            </header>
+            
+            <!-- Sections -->
+            
+            <!-- SECTION: Diamante -->
+            <section id="section-diamante" class="section active">
+                <div class="mb-6">
+                    <div class="flex items-center gap-6 mb-4">
+                        <div class="h-16 flex items-center">
+                            <div class="flex items-center gap-2">
+                                <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
+                                    <i data-lucide="flame" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <span class="text-2xl font-bold text-green-600">PEMEX</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold gradient-text mb-1">Proyectos Transición Energética (en definición)</h2>
+                            <p class="text-gray-400">Modelo integrado que sintetiza los 7 fundamentos de la transición energética de Pemex</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-6">
+                    <!-- Cuadrante Superior -->
+                    <div class="col-span-3 flex justify-center">
+                        <div class="glassmorphism rounded-2xl p-5 vector-card max-w-lg w-full">
+                            <div class="flex items-center gap-2 mb-3 text-yellow-400">
+                                <i data-lucide="globe" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-lg">Rectoría y Fundamentos</h3>
+                            </div>
+                            <p class="text-xs text-gray-400 mb-4">Propiedad Nacional y Estrategia</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-yellow-500/10 transition-colors">
+                                    <div class="p-2 rounded-lg bg-white/10 text-yellow-400"><i data-lucide="shield" class="w-5 h-5"></i></div>
+                                    <div><p class="text-sm font-medium text-white">Propiedad Nacional</p><p class="text-xs text-gray-400">Recursos hidrocarburos son de la nación</p></div>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-yellow-500/10 transition-colors">
+                                    <div class="p-2 rounded-lg bg-white/10 text-yellow-400"><i data-lucide="file-text" class="w-5 h-5"></i></div>
+                                    <div><p class="text-sm font-medium text-white">Rectoría Estratégica</p><p class="text-xs text-gray-400">Planeación centralizada del sector</p></div>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-yellow-500/10 transition-colors">
+                                    <div class="p-2 rounded-lg bg-white/10 text-yellow-400"><i data-lucide="eye" class="w-5 h-5"></i></div>
+                                    <div><p class="text-sm font-medium text-white">Transparencia</p><p class="text-xs text-gray-400">Impacto social medible y reportado</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cuadrante Izquierdo -->
+                    <div class="glassmorphism rounded-2xl p-5 vector-card">
+                        <div class="flex items-center gap-2 mb-3 text-green-400">
+                            <i data-lucide="globe" class="w-5 h-5"></i>
+                            <h3 class="font-bold text-lg">Nuevas Cadenas de Valor</h3>
+                        </div>
+                        <p class="text-xs text-gray-400 mb-4">Descarbonización</p>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-green-500/10 transition-colors">
+                                <div class="p-2 rounded-lg bg-white/10 text-green-400"><i data-lucide="droplets" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-medium text-white">Hidrógeno Azul/Verde</p><p class="text-xs text-gray-400">Conexión refinería-CFE</p></div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-green-500/10 transition-colors">
+                                <div class="p-2 rounded-lg bg-white/10 text-green-400"><i data-lucide="factory" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-medium text-white">CCUS</p><p class="text-xs text-gray-400">Captura y almacenamiento CO₂</p></div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-green-500/10 transition-colors">
+                                <div class="p-2 rounded-lg bg-white/10 text-green-400"><i data-lucide="leaf" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-medium text-white">Biocombustibles</p><p class="text-xs text-gray-400">SAF/HVO agroindustria</p></div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-green-500/10 transition-colors">
+                                <div class="p-2 rounded-lg bg-white/10 text-green-400"><i data-lucide="recycle" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-medium text-white">Petroquímica Circular</p><p class="text-xs text-gray-400">Reciclaje y PyMES</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Centro - Núcleo PEMEX-CFE -->
+                    <div class="flex items-center justify-center">
+                        <div class="relative w-full max-w-[280px] aspect-square">
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-br from-green-500/30 via-yellow-500/20 to-blue-500/30 blur-2xl pulse-animation"></div>
+                            <div class="relative glassmorphism rounded-full h-full flex flex-col items-center justify-center diamond-shadow border-2 border-green-500/30">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center shadow-lg">
+                                        <i data-lucide="building-2" class="w-8 h-8 text-white"></i>
+                                    </div>
+                                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg">
+                                        <i data-lucide="zap" class="w-8 h-8 text-white"></i>
+                                    </div>
+                                </div>
+                                <h3 class="text-xl font-bold text-white text-center">PEMEX - CFE</h3>
+                                <p class="text-sm text-green-400 font-medium">Sinergia Estructural</p>
+                                <p class="text-xs text-gray-400 mt-2 text-center px-4">Sistema Energético Nacional Integrado</p>
+                                <div class="absolute inset-0 rounded-full border-2 border-green-400/30 rotate-slow"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cuadrante Derecho -->
+                    <div class="glassmorphism rounded-2xl p-5 vector-card">
+                        <div class="flex items-center gap-2 mb-3 text-blue-400">
+                            <i data-lucide="globe" class="w-5 h-5"></i>
+                            <h3 class="font-bold text-lg">Optimización de Activos</h3>
+                        </div>
+                        <p class="text-xs text-gray-400 mb-4">Valorización de Infraestructura</p>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-500/10 transition-colors">
+                                <div class="p-2 rounded-lg bg-white/10 text-blue-400"><i data-lucide="thermometer-sun" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-medium text-white">Geotermia/Marina</p><p class="text-xs text-gray-400">Aprovechamiento pozos agotados</p></div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-500/10 transition-colors">
+                                <div class="p-2 rounded-lg bg-white/10 text-blue-400"><i data-lucide="zap" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-medium text-white">Electrificación</p><p class="text-xs text-gray-400">Plataformas con solar/eólica</p></div>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-blue-500/10 transition-colors">
+                                <div class="p-2 rounded-lg bg-white/10 text-blue-400"><i data-lucide="network" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-medium text-white">Red de Ductos</p><p class="text-xs text-gray-400">Transporte CO₂ e H₂</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cuadrante Inferior -->
+                    <div class="col-span-3 flex justify-center">
+                        <div class="glassmorphism rounded-2xl p-5 vector-card max-w-lg w-full">
+                            <div class="flex items-center gap-2 mb-3 text-orange-400">
+                                <i data-lucide="globe" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-lg">Base Social y Laboral</h3>
+                            </div>
+                            <p class="text-xs text-gray-400 mb-4">Responsabilidad Social</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-orange-500/10 transition-colors">
+                                    <div class="p-2 rounded-lg bg-white/10 text-orange-400"><i data-lucide="graduation-cap" class="w-5 h-5"></i></div>
+                                    <div><p class="text-sm font-medium text-white">Reconversión Laboral</p><p class="text-xs text-gray-400">Capacitación personal sindicalizado</p></div>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 rounded-xl hover:bg-orange-500/10 transition-colors">
+                                    <div class="p-2 rounded-lg bg-white/10 text-orange-400"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+                                    <div><p class="text-sm font-medium text-white">Desarrollo Regional</p><p class="text-xs text-gray-400">Beneficios comunidades locales</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- SECTION: Vectores -->
+            <section id="section-vectores" class="section">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold gradient-text mb-2">6 Vectores de Expansión</h2>
+                    <p class="text-gray-400">Análisis técnico-económico de oportunidades de negocios bajos en carbono</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <!-- Vector 1: Eólica Marina -->
+                    <div class="glassmorphism rounded-2xl overflow-hidden vector-card">
+                        <button onclick="toggleVector('eolica')" class="w-full p-5 flex items-center gap-4 text-left">
+                            <div class="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 text-cyan-400">
+                                <i data-lucide="wind" class="w-8 h-8"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-cyan-400">Eólica Marina Off-shore</h3>
+                                <p class="text-sm text-gray-400">Aprovechamiento de Activos Existentes</p>
+                            </div>
+                            <span class="text-xs px-2 py-1 rounded-full bg-blue-500/20 text-blue-400">Potencial: Alto</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform" id="chevron-eolica"></i>
+                        </button>
+                        <div class="expand-content" id="content-eolica">
+                            <div class="px-5 pb-5 border-t border-white/10 pt-4">
+                                <p class="text-sm text-gray-300 mb-4">El potencial técnico en la Sonda de Campeche supera los 2,500 millones de GWh/año. La propuesta de valor más sólida es el reuso de plataformas desmanteladas.</p>
+                                <div class="grid grid-cols-3 gap-3 mb-4">
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <i data-lucide="zap" class="w-4 h-4 text-cyan-400 mx-auto mb-2"></i>
+                                        <p class="text-lg font-bold text-white">2,500M GWh/año</p>
+                                        <p class="text-xs text-gray-400">Potencial técnico</p>
+                                    </div>
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <i data-lucide="dollar-sign" class="w-4 h-4 text-cyan-400 mx-auto mb-2"></i>
+                                        <p class="text-lg font-bold text-white">25-35%</p>
+                                        <p class="text-xs text-gray-400">Reducción costos</p>
+                                    </div>
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <i data-lucide="factory" class="w-4 h-4 text-cyan-400 mx-auto mb-2"></i>
+                                        <p class="text-lg font-bold text-white">3-5 unidades</p>
+                                        <p class="text-xs text-gray-400">Plataformas piloto</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-green-400 mb-2">✓ Ventajas</h4>
+                                        <ul class="space-y-1 text-xs text-gray-400">
+                                            <li>• Reuso de plataformas desmanteladas</li>
+                                            <li>• Reducción 25-35% vs greenfield</li>
+                                            <li>• Experiencia en offshore</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-red-400 mb-2">⚠ Riesgos</h4>
+                                        <ul class="space-y-1 text-xs text-gray-400">
+                                            <li>• Alta inversión inicial</li>
+                                            <li>• Complejidad técnica</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="rounded-xl p-3 bg-gradient-to-r from-cyan-500/20 to-cyan-600/10 border border-white/10">
+                                    <p class="text-xs text-gray-400 mb-1">Recomendación</p>
+                                    <p class="text-sm font-medium text-cyan-400">Establecer unidad de negocio 'Energías Marinas' con 3-5 plataformas piloto en 2027-2028</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vector 2: Litio -->
+                    <div class="glassmorphism rounded-2xl overflow-hidden vector-card">
+                        <button onclick="toggleVector('litio')" class="w-full p-5 flex items-center gap-4 text-left">
+                            <div class="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 text-purple-400">
+                                <i data-lucide="battery" class="w-8 h-8"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-purple-400">Litio en Salmueras Petroleras</h3>
+                                <p class="text-sm text-gray-400">La Oportunidad del 'Petrolitio'</p>
+                            </div>
+                            <span class="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-400">Potencial: Muy Alto</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform" id="chevron-litio"></i>
+                        </button>
+                        <div class="expand-content" id="content-litio">
+                            <div class="px-5 pb-5 border-t border-white/10 pt-4">
+                                <p class="text-sm text-gray-300 mb-4">Concentraciones de litio comparables a salares bolivianos en salmueras de Tamaulipas, Veracruz, Tabasco, Campeche y Chiapas.</p>
+                                <div class="grid grid-cols-3 gap-3 mb-4">
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <p class="text-lg font-bold text-white">20% anual</p>
+                                        <p class="text-xs text-gray-400">Crecimiento mercado</p>
+                                    </div>
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <p class="text-lg font-bold text-white">5 estados</p>
+                                        <p class="text-xs text-gray-400">Con potencial</p>
+                                    </div>
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <p class="text-lg font-bold text-white">DLE</p>
+                                        <p class="text-xs text-gray-400">Tecnología</p>
+                                    </div>
+                                </div>
+                                <div class="rounded-xl p-3 bg-gradient-to-r from-purple-500/20 to-purple-600/10 border border-white/10">
+                                    <p class="text-xs text-gray-400 mb-1">Recomendación</p>
+                                    <p class="text-sm font-medium text-purple-400">Crear subsidiaria 'Pemex Litio' con piloto en 2-3 ubicaciones para 2027</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vector 3: Hidrógeno -->
+                    <div class="glassmorphism rounded-2xl overflow-hidden vector-card">
+                        <button onclick="toggleVector('hidrogeno')" class="w-full p-5 flex items-center gap-4 text-left">
+                            <div class="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 text-blue-400">
+                                <i data-lucide="droplets" class="w-8 h-8"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-blue-400">Hidrógeno</h3>
+                                <p class="text-sm text-gray-400">Portafolio Dual (Azul y Verde)</p>
+                            </div>
+                            <span class="text-xs px-2 py-1 rounded-full bg-blue-500/20 text-blue-400">Potencial: Alto</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform" id="chevron-hidrogeno"></i>
+                        </button>
+                        <div class="expand-content" id="content-hidrogeno">
+                            <div class="px-5 pb-5 border-t border-white/10 pt-4">
+                                <p class="text-sm text-gray-300 mb-4">Mercado emergente con aplicaciones en refinerías y transporte pesado. Estrategia dual: azul corto plazo, verde mediano-largo plazo.</p>
+                                <div class="grid grid-cols-3 gap-3 mb-4">
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <p class="text-lg font-bold text-white">5-10%</p>
+                                        <p class="text-xs text-gray-400">Mezcla en turbinas</p>
+                                    </div>
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <p class="text-lg font-bold text-white">Corto plazo</p>
+                                        <p class="text-xs text-gray-400">H₂ Azul</p>
+                                    </div>
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <p class="text-lg font-bold text-white">Mediano plazo</p>
+                                        <p class="text-xs text-gray-400">H₂ Verde</p>
+                                    </div>
+                                </div>
+                                <div class="rounded-xl p-3 bg-gradient-to-r from-blue-500/20 to-blue-600/10 border border-white/10">
+                                    <p class="text-xs text-gray-400 mb-1">Recomendación</p>
+                                    <p class="text-sm font-medium text-blue-400">Iniciar con H₂ azul en complejos petroquímicos, escalar a verde con solar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vector 4: Biocombustibles -->
+                    <div class="glassmorphism rounded-2xl overflow-hidden vector-card">
+                        <button onclick="toggleVector('bio')" class="w-full p-5 flex items-center gap-4 text-left">
+                            <div class="p-3 rounded-xl bg-gradient-to-br from-green-500/20 to-green-600/10 text-green-400">
+                                <i data-lucide="leaf" class="w-8 h-8"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-green-400">Biocombustibles y Bioenergía</h3>
+                                <p class="text-sm text-gray-400">Portafolio Completo</p>
+                            </div>
+                            <span class="text-xs px-2 py-1 rounded-full bg-blue-500/20 text-blue-400">Potencial: Alto</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform" id="chevron-bio"></i>
+                        </button>
+                        <div class="expand-content" id="content-bio">
+                            <div class="px-5 pb-5 border-t border-white/10 pt-4">
+                                <p class="text-sm text-gray-300 mb-4">Portafolio múltiple: etanol, diésel renovable, SAF y gas natural renovable. Las refinerías existentes pueden adaptarse para coprocesamiento.</p>
+                                <div class="rounded-xl p-3 bg-gradient-to-r from-green-500/20 to-green-600/10 border border-white/10">
+                                    <p class="text-xs text-gray-400 mb-1">Recomendación</p>
+                                    <p class="text-sm font-medium text-green-400">Plantas de biocombustibles en refinerías seleccionadas para 2028-2030</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vector 5: Eficiencia -->
+                    <div class="glassmorphism rounded-2xl overflow-hidden vector-card">
+                        <button onclick="toggleVector('eficiencia')" class="w-full p-5 flex items-center gap-4 text-left">
+                            <div class="p-3 rounded-xl bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 text-yellow-400">
+                                <i data-lucide="gauge" class="w-8 h-8"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-yellow-400">Eficiencia Energética</h3>
+                                <p class="text-sm text-gray-400">Centro de Utilidades</p>
+                            </div>
+                            <span class="text-xs px-2 py-1 rounded-full bg-blue-500/20 text-blue-400">Potencial: Alto</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform" id="chevron-eficiencia"></i>
+                        </button>
+                        <div class="expand-content" id="content-eficiencia">
+                            <div class="px-5 pb-5 border-t border-white/10 pt-4">
+                                <p class="text-sm text-gray-300 mb-4">La eficiencia energética debe tratarse como centro de utilidades. Incluye recuperación gas antorcha (~10%), cogeneración 2,422 MW y reciclaje de agua.</p>
+                                <div class="grid grid-cols-3 gap-3 mb-4">
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <p class="text-lg font-bold text-white">~10%</p>
+                                        <p class="text-xs text-gray-400">Gas de antorcha</p>
+                                    </div>
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <p class="text-lg font-bold text-white">2,422 MW</p>
+                                        <p class="text-xs text-gray-400">Cogeneración</p>
+                                    </div>
+                                    <div class="glassmorphism rounded-xl p-3 text-center">
+                                        <p class="text-lg font-bold text-white">6.1%</p>
+                                        <p class="text-xs text-gray-400">Meta reducción</p>
+                                    </div>
+                                </div>
+                                <div class="rounded-xl p-3 bg-gradient-to-r from-yellow-500/20 to-yellow-600/10 border border-white/10">
+                                    <p class="text-xs text-gray-400 mb-1">Recomendación</p>
+                                    <p class="text-sm font-medium text-yellow-400">Programa intensivo de recuperación gas quemado (meta: reducir 30% quema)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Vector 6: Geotermia -->
+                    <div class="glassmorphism rounded-2xl overflow-hidden vector-card">
+                        <button onclick="toggleVector('geotermia')" class="w-full p-5 flex items-center gap-4 text-left">
+                            <div class="p-3 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 text-orange-400">
+                                <i data-lucide="thermometer-sun" class="w-8 h-8"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-orange-400">Geotermia de Alta Entalpía</h3>
+                                <p class="text-sm text-gray-400">Generación Despachable</p>
+                            </div>
+                            <span class="text-xs px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400">Potencial: Medio-Alto</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform" id="chevron-geotermia"></i>
+                        </button>
+                        <div class="expand-content" id="content-geotermia">
+                            <div class="px-5 pb-5 border-t border-white/10 pt-4">
+                                <p class="text-sm text-gray-300 mb-4">Aprovechamiento de calor residual de pozos petroleros de alta temperatura para generación eléctrica despachable (no intermitente).</p>
+                                <div class="rounded-xl p-3 bg-gradient-to-r from-orange-500/20 to-orange-600/10 border border-white/10">
+                                    <p class="text-xs text-gray-400 mb-1">Recomendación</p>
+                                    <p class="text-sm font-medium text-orange-400">Evaluar pozos petroleros de alta temperatura para proyectos piloto geotérmicos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- SECTION: Comparativa -->
+            <section id="section-comparativa" class="section">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold gradient-text mb-2">Evolución del Modelo de Negocio</h2>
+                    <p class="text-gray-400">Comparativa entre el modelo neoliberal/privatizador (2013) y el modelo soberano/sostenible (2024)</p>
+                </div>
+                
+                <div class="glassmorphism rounded-2xl overflow-hidden">
+                    <div class="grid grid-cols-3 border-b border-white/10">
+                        <div class="p-4 flex items-center justify-center border-r border-white/10">
+                            <span class="text-sm font-semibold text-gray-400">Eje de Comparación</span>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-gray-600/20 to-gray-700/10 flex flex-col items-center justify-center border-r border-white/10">
+                            <span class="text-lg font-bold text-gray-400">Modelo 2013</span>
+                            <span class="text-xs text-gray-500">Neoliberal / Privatizador</span>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-green-500/20 to-emerald-500/10 flex flex-col items-center justify-center">
+                            <span class="text-lg font-bold text-green-400">Modelo 2024</span>
+                            <span class="text-xs text-green-300/70">Soberano / Sostenible</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Rows -->
+                    <div class="grid grid-cols-3 border-b border-white/10">
+                        <div class="p-4 flex items-center gap-3 border-r border-white/10">
+                            <div class="p-2 rounded-lg bg-white/5 text-yellow-400"><i data-lucide="diamond" class="w-5 h-5"></i></div>
+                            <span class="text-sm font-medium text-white">Representación Visual</span>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-gray-600/10 to-transparent border-r border-white/10">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="p-3 rounded-xl bg-white/5 text-gray-400"><i data-lucide="boxes" class="w-8 h-8"></i></div>
+                                <p class="text-sm text-gray-400">Múltiples cajas independientes (Upstream, Downstream, Midstream)</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-green-500/10 to-transparent">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="p-3 rounded-xl bg-white/10 text-green-400"><i data-lucide="diamond" class="w-8 h-8"></i></div>
+                                <p class="text-sm text-gray-300">Un diamante central integrado que irradia hacia nuevas cadenas de valor</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 border-b border-white/10">
+                        <div class="p-4 flex items-center gap-3 border-r border-white/10">
+                            <div class="p-2 rounded-lg bg-white/5 text-yellow-400"><i data-lucide="arrow-right-left" class="w-5 h-5"></i></div>
+                            <span class="text-sm font-medium text-white">Flujo de Energía</span>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-gray-600/10 to-transparent border-r border-white/10">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="p-3 rounded-xl bg-white/5 text-gray-400"><i data-lucide="arrow-right" class="w-8 h-8"></i></div>
+                                <p class="text-sm text-gray-400">Lineal y fragmentado</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-green-500/10 to-transparent">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="p-3 rounded-xl bg-white/10 text-green-400"><i data-lucide="refresh-cw" class="w-8 h-8"></i></div>
+                                <p class="text-sm text-gray-300">Circular e integrado. Los residuos son insumos de otro proceso</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 border-b border-white/10">
+                        <div class="p-4 flex items-center gap-3 border-r border-white/10">
+                            <div class="p-2 rounded-lg bg-white/5 text-yellow-400"><i data-lucide="handshake" class="w-5 h-5"></i></div>
+                            <span class="text-sm font-medium text-white">Relación Pemex-CFE</span>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-gray-600/10 to-transparent border-r border-white/10">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="p-3 rounded-xl bg-white/5 text-red-400"><i data-lucide="building-2" class="w-8 h-8"></i></div>
+                                <p class="text-sm text-gray-400">Competencia o indiferencia</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-green-500/10 to-transparent">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="p-3 rounded-xl bg-white/10 text-blue-400"><i data-lucide="zap" class="w-8 h-8"></i></div>
+                                <p class="text-sm text-gray-300">Sinergia total (cogeneración, electrificación limpia, hidrógeno)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 border-b border-white/10">
+                        <div class="p-4 flex items-center gap-3 border-r border-white/10">
+                            <div class="p-2 rounded-lg bg-white/5 text-yellow-400"><i data-lucide="target" class="w-5 h-5"></i></div>
+                            <span class="text-sm font-medium text-white">Objetivo Final</span>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-gray-600/10 to-transparent border-r border-white/10">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="p-3 rounded-xl bg-white/5 text-yellow-500"><i data-lucide="dollar-sign" class="w-8 h-8"></i></div>
+                                <p class="text-sm text-gray-400">Maximizar la renta petrolera y eficiencia del mercado</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-green-500/10 to-transparent">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="p-3 rounded-xl bg-white/10 text-green-400"><i data-lucide="globe" class="w-8 h-8"></i></div>
+                                <p class="text-sm text-gray-300">Maximizar el valor nacional, resiliencia climática y soberanía</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3">
+                        <div class="p-4 flex items-center gap-3 border-r border-white/10">
+                            <div class="p-2 rounded-lg bg-white/5 text-yellow-400"><i data-lucide="leaf" class="w-5 h-5"></i></div>
+                            <span class="text-sm font-medium text-white">Simbología</span>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-gray-600/10 to-transparent border-r border-white/10">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="p-3 rounded-xl bg-white/5 text-gray-400"><i data-lucide="tower-control" class="w-8 h-8"></i></div>
+                                <p class="text-sm text-gray-400">Flechas rectas, torres de perforación, dinero</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-gradient-to-r from-green-500/10 to-transparent">
+                            <div class="flex flex-col items-center text-center gap-3">
+                                <div class="p-3 rounded-xl bg-white/10 text-green-400"><i data-lucide="recycle" class="w-8 h-8"></i></div>
+                                <p class="text-sm text-gray-300">Flechas circulares, hojas verdes, núcleos de integración, personas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Visual Summary -->
+                <div class="mt-6 grid grid-cols-2 gap-6">
+                    <div class="glassmorphism rounded-2xl p-6 border border-gray-500/20">
+                        <h3 class="text-lg font-bold text-gray-400 mb-4">Modelo 2013</h3>
+                        <div class="flex items-center justify-center gap-4">
+                            <div class="p-4 rounded-xl bg-gray-600/20 text-gray-400"><i data-lucide="boxes" class="w-12 h-12"></i></div>
+                            <i data-lucide="arrow-right" class="w-6 h-6 text-gray-500"></i>
+                            <div class="p-4 rounded-xl bg-gray-600/20 text-gray-400"><i data-lucide="building-2" class="w-12 h-12"></i></div>
+                            <i data-lucide="arrow-right" class="w-6 h-6 text-gray-500"></i>
+                            <div class="p-4 rounded-xl bg-gray-600/20 text-yellow-500"><i data-lucide="dollar-sign" class="w-12 h-12"></i></div>
+                        </div>
+                        <p class="text-center text-sm text-gray-500 mt-4">Flujo lineal → Extracción → Venta</p>
+                    </div>
+                    
+                    <div class="glassmorphism rounded-2xl p-6 border border-green-500/20">
+                        <h3 class="text-lg font-bold text-green-400 mb-4">Modelo 2024</h3>
+                        <div class="flex items-center justify-center">
+                            <div class="relative">
+                                <div class="p-6 rounded-full bg-gradient-to-br from-green-500/20 to-blue-500/20 border border-green-500/30 rotate-slow">
+                                    <i data-lucide="diamond" class="w-12 h-12 text-green-400"></i>
+                                </div>
+                                <div class="absolute -top-2 -right-2 p-2 rounded-full bg-blue-500/20"><i data-lucide="zap" class="w-5 h-5 text-blue-400"></i></div>
+                                <div class="absolute -bottom-2 -left-2 p-2 rounded-full bg-green-500/20"><i data-lucide="leaf" class="w-5 h-5 text-green-400"></i></div>
+                                <div class="absolute -bottom-2 -right-2 p-2 rounded-full bg-yellow-500/20"><i data-lucide="users" class="w-5 h-5 text-yellow-400"></i></div>
+                            </div>
+                        </div>
+                        <p class="text-center text-sm text-green-300/70 mt-4">Integración circular → Valor nacional → Soberanía</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- SECTION: Hoja de Ruta -->
+            <section id="section-hoja-ruta" class="section">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold gradient-text mb-2">Hoja de Ruta 2026-2035</h2>
+                    <p class="text-gray-400">Cronograma estratégico para la transición energética de Pemex</p>
+                </div>
+                
+                <div class="relative">
+                    <div class="absolute top-12 left-0 right-0 h-1 timeline-line rounded-full"></div>
+                    
+                    <div class="grid grid-cols-3 gap-6">
+                        <!-- Corto Plazo -->
+                        <div class="relative">
+                            <div class="flex justify-center mb-4">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/10 flex items-center justify-center border-4 border-slate-900 z-10 text-blue-400">
+                                    <i data-lucide="clock" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <div class="glassmorphism rounded-2xl p-5 vector-card">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <i data-lucide="calendar-days" class="w-5 h-5 text-blue-400"></i>
+                                    <div>
+                                        <h3 class="font-bold text-lg text-blue-400">Corto Plazo</h3>
+                                        <p class="text-sm text-gray-400">2026-2027</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/10 text-blue-400"><i data-lucide="flame" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">Recuperación Gas Quemado</p><p class="text-xs text-gray-400">Meta: reducir 30% la quema</p></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/10 text-blue-400"><i data-lucide="battery" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">Piloto Litio en Salmueras</p><p class="text-xs text-gray-400">2-3 ubicaciones estratégicas</p></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/10 text-blue-400"><i data-lucide="sun" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">Paneles Solares</p><p class="text-xs text-gray-400">En estaciones de servicio</p></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/10 text-blue-400"><i data-lucide="handshake" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">Alianza CFE</p><p class="text-xs text-gray-400">Acuerdo formal cogeneración</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mediano Plazo -->
+                        <div class="relative">
+                            <div class="flex justify-center mb-4">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-500/20 to-green-600/10 flex items-center justify-center border-4 border-slate-900 z-10 text-green-400">
+                                    <i data-lucide="target" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <div class="glassmorphism rounded-2xl p-5 vector-card">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <i data-lucide="calendar-days" class="w-5 h-5 text-green-400"></i>
+                                    <div>
+                                        <h3 class="font-bold text-lg text-green-400">Mediano Plazo</h3>
+                                        <p class="text-sm text-gray-400">2028-2030</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-green-500/20 to-green-600/10 text-green-400"><i data-lucide="wind" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">Eólica Offshore</p><p class="text-xs text-gray-400">Primer parque en plataforma reconvertida</p></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-green-500/20 to-green-600/10 text-green-400"><i data-lucide="battery" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">Pemex Litio Operativa</p><p class="text-xs text-gray-400">Producción comercial de litio</p></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-green-500/20 to-green-600/10 text-green-400"><i data-lucide="droplets" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">Mezcla Hidrógeno</p><p class="text-xs text-gray-400">5-10% en ciclos combinados</p></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-green-500/20 to-green-600/10 text-green-400"><i data-lucide="leaf" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">Biocombustibles</p><p class="text-xs text-gray-400">Plantas en refinerías seleccionadas</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Largo Plazo -->
+                        <div class="relative">
+                            <div class="flex justify-center mb-4">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 flex items-center justify-center border-4 border-slate-900 z-10 text-yellow-400">
+                                    <i data-lucide="rocket" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <div class="glassmorphism rounded-2xl p-5 vector-card">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <i data-lucide="calendar-days" class="w-5 h-5 text-yellow-400"></i>
+                                    <div>
+                                        <h3 class="font-bold text-lg text-yellow-400">Largo Plazo</h3>
+                                        <p class="text-sm text-gray-400">2031-2035</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 text-yellow-400"><i data-lucide="target" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">20% Ingresos Bajos Carbono</p><p class="text-xs text-gray-400">Portafolio balanceado</p></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 text-yellow-400"><i data-lucide="factory" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">CCUS Industrial</p><p class="text-xs text-gray-400">Captura y almacenamiento a escala</p></div>
+                                    </div>
+                                    <div class="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors">
+                                        <div class="p-2 rounded-lg bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 text-yellow-400"><i data-lucide="plane" class="w-5 h-5"></i></div>
+                                        <div><p class="text-sm font-medium text-white">Liderazgo SAF</p><p class="text-xs text-gray-400">Combustibles sostenibles de aviación</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- KPIs -->
+                <div class="mt-8 grid grid-cols-4 gap-4">
+                    <div class="glassmorphism rounded-xl p-4 text-center vector-card">
+                        <p class="text-2xl font-bold text-blue-400">30%</p>
+                        <p class="text-sm text-gray-400 mt-1">Reducción Quema</p>
+                        <p class="text-xs text-gray-500 mt-1">Meta 2027</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-4 text-center vector-card">
+                        <p class="text-2xl font-bold text-green-400">2,422 MW</p>
+                        <p class="text-sm text-gray-400 mt-1">Cogeneración</p>
+                        <p class="text-xs text-gray-500 mt-1">Meta 2030</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-4 text-center vector-card">
+                        <p class="text-2xl font-bold text-yellow-400">20%</p>
+                        <p class="text-sm text-gray-400 mt-1">Ingresos Low-Carbon</p>
+                        <p class="text-xs text-gray-500 mt-1">Meta 2035</p>
+                    </div>
+                    <div class="glassmorphism rounded-xl p-4 text-center vector-card">
+                        <p class="text-2xl font-bold text-purple-400">5-10%</p>
+                        <p class="text-sm text-gray-400 mt-1">Mezcla H₂</p>
+                        <p class="text-xs text-gray-500 mt-1">Meta 2030</p>
+                    </div>
+                </div>
+                
+                <!-- Nota -->
+                <div class="mt-6 glassmorphism rounded-xl p-4 border border-green-500/20">
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="check-circle-2" class="w-5 h-5 text-green-400 mt-0.5"></i>
+                        <p class="text-sm text-gray-300">
+                            <strong class="text-green-400">Expo MEiH 2026:</strong> La participación de Pemex debe aprovecharse para concretar alianzas estratégicas y atraer inversión.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- SECTION: Modelo de Negocio -->
+            <section id="section-modelo" class="section">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold gradient-text mb-2">Modelo de Negocio Integrado</h2>
+                    <p class="text-gray-400">Reconfiguración corporativa: La Empresa Energética Nacional del Futuro</p>
+                </div>
+                
+                <div class="glassmorphism rounded-2xl p-6 mb-6 text-center border border-green-500/20">
+                    <div class="flex items-center justify-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/20">
+                            <i data-lucide="shield" class="w-8 h-8 text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">PEMEX: Empresa Energética Nacional</h3>
+                    <p class="text-gray-400 max-w-2xl mx-auto">Tres divisiones de negocio integradas que maximizan el valor nacional, la resiliencia climática y la soberanía energética</p>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-6 mb-6">
+                    <!-- División Hidrocarburos -->
+                    <div class="glassmorphism rounded-2xl p-5 vector-card">
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 text-amber-400 mb-4 w-fit">
+                            <i data-lucide="fuel" class="w-10 h-10"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-amber-400 mb-1">Hidrocarburos Optimizados</h3>
+                        <p class="text-xs text-gray-500 mb-4">División Core</p>
+                        <div class="space-y-3 mb-4">
+                            <div><p class="text-xs text-gray-400 mb-1">Enfoque</p><p class="text-sm text-gray-300">Producción con bajas emisiones, eficiencia, captura de metano</p></div>
+                            <div><p class="text-xs text-gray-400 mb-1">Sinergias</p><p class="text-sm text-green-300">Financia la transición energética</p></div>
+                        </div>
+                        <div class="border-t border-white/10 pt-4">
+                            <p class="text-xs text-gray-400 mb-2">Actividades Clave</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-amber-400"></div>Recuperación gas de antorcha</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-amber-400"></div>Cogeneración eficiente</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-amber-400"></div>Captura de metano</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-amber-400"></div>Optimización refinación</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- División Energías Limpias -->
+                    <div class="glassmorphism rounded-2xl p-5 vector-card">
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-green-500/20 to-green-600/10 text-green-400 mb-4 w-fit">
+                            <i data-lucide="zap" class="w-10 h-10"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-green-400 mb-1">Energías Limpias</h3>
+                        <p class="text-xs text-gray-500 mb-4">División Crecimiento</p>
+                        <div class="space-y-3 mb-4">
+                            <div><p class="text-xs text-gray-400 mb-1">Enfoque</p><p class="text-sm text-gray-300">Eólica, solar, geotermia, biocombustibles</p></div>
+                            <div><p class="text-xs text-gray-400 mb-1">Sinergias</p><p class="text-sm text-green-300">Aprovecha activos y derechos de vía</p></div>
+                        </div>
+                        <div class="border-t border-white/10 pt-4">
+                            <p class="text-xs text-gray-400 mb-2">Actividades Clave</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>Eólica marina offshore</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>Geotermia de pozos</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>Biocombustibles SAF/HVO</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>Hidrógeno azul/verde</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- División Minerales -->
+                    <div class="glassmorphism rounded-2xl p-5 vector-card">
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 text-purple-400 mb-4 w-fit">
+                            <i data-lucide="gem" class="w-10 h-10"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-purple-400 mb-1">Minerales Estratégicos</h3>
+                        <p class="text-xs text-gray-500 mb-4">División Diversificación</p>
+                        <div class="space-y-3 mb-4">
+                            <div><p class="text-xs text-gray-400 mb-1">Enfoque</p><p class="text-sm text-gray-300">Litio en salmueras</p></div>
+                            <div><p class="text-xs text-gray-400 mb-1">Sinergias</p><p class="text-sm text-green-300">Utiliza infraestructura de producción de agua</p></div>
+                        </div>
+                        <div class="border-t border-white/10 pt-4">
+                            <p class="text-xs text-gray-400 mb-2">Actividades Clave</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-purple-400"></div>Extracción DLE</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-purple-400"></div>Integración cadena baterías</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-purple-400"></div>Alianza LitioMX</div>
+                                <div class="flex items-center gap-2 text-xs text-gray-300"><div class="w-1.5 h-1.5 rounded-full bg-purple-400"></div>Soberanía minerales críticos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Flujo de Sinergias -->
+                <div class="glassmorphism rounded-2xl p-6">
+                    <h4 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="recycle" class="w-5 h-5 text-green-400"></i>
+                        Flujo de Sinergias entre Divisiones
+                    </h4>
+                    <div class="flex items-center justify-between">
+                        <div class="text-center">
+                            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 flex items-center justify-center mb-2 border border-amber-500/30">
+                                <i data-lucide="fuel" class="w-8 h-8 text-amber-400"></i>
+                            </div>
+                            <p class="text-xs text-amber-400 font-medium">Hidrocarburos</p>
+                            <p class="text-xs text-gray-500">Genera capital</p>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <i data-lucide="arrow-right" class="w-8 h-8 text-green-400"></i>
+                            <p class="text-xs text-gray-400">Financia</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-green-500/20 to-green-600/10 flex items-center justify-center mb-2 border border-green-500/30">
+                                <i data-lucide="zap" class="w-8 h-8 text-green-400"></i>
+                            </div>
+                            <p class="text-xs text-green-400 font-medium">Energías Limpias</p>
+                            <p class="text-xs text-gray-500">Usa activos</p>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <i data-lucide="arrow-right" class="w-8 h-8 text-purple-400"></i>
+                            <p class="text-xs text-gray-400">Comparte infra</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 flex items-center justify-center mb-2 border border-purple-500/30">
+                                <i data-lucide="gem" class="w-8 h-8 text-purple-400"></i>
+                            </div>
+                            <p class="text-xs text-purple-400 font-medium">Minerales</p>
+                            <p class="text-xs text-gray-500">Diversifica</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 pt-4 border-t border-white/10">
+                        <div class="grid grid-cols-4 gap-4">
+                            <div class="text-center">
+                                <i data-lucide="trending-up" class="w-5 h-5 text-green-400 mx-auto mb-1"></i>
+                                <p class="text-lg font-bold text-white">20%</p>
+                                <p class="text-xs text-gray-400">Ingresos bajos carbono (2035)</p>
+                            </div>
+                            <div class="text-center">
+                                <i data-lucide="factory" class="w-5 h-5 text-amber-400 mx-auto mb-1"></i>
+                                <p class="text-lg font-bold text-white">2,422 MW</p>
+                                <p class="text-xs text-gray-400">Cogeneración proyectada</p>
+                            </div>
+                            <div class="text-center">
+                                <i data-lucide="battery" class="w-5 h-5 text-purple-400 mx-auto mb-1"></i>
+                                <p class="text-lg font-bold text-white">5</p>
+                                <p class="text-xs text-gray-400">Estados con potencial litio</p>
+                            </div>
+                            <div class="text-center">
+                                <i data-lucide="leaf" class="w-5 h-5 text-green-400 mx-auto mb-1"></i>
+                                <p class="text-lg font-bold text-white">6.1%</p>
+                                <p class="text-xs text-gray-400">Meta reducción consumo</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- SECTION: Riesgos -->
+            <section id="section-riesgos" class="section">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold gradient-text mb-2">Análisis de Riesgos y Barreras</h2>
+                    <p class="text-gray-400">Identificación de riesgos críticos y soluciones propuestas para la transición</p>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-6">
+                    <!-- Lista de riesgos -->
+                    <div class="space-y-3">
+                        <button onclick="selectRisk('financiero')" class="risk-btn w-full glassmorphism rounded-xl p-4 text-left transition-all border border-white/20 shadow-lg" data-risk="financiero">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 rounded-lg bg-gradient-to-br from-red-500/20 to-red-600/10 text-red-400"><i data-lucide="dollar-sign" class="w-6 h-6"></i></div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-red-400">Riesgo Financiero</h4>
+                                    <p class="text-xs text-gray-400">Presupuestal</p>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-white"></i>
+                            </div>
+                        </button>
+                        
+                        <button onclick="selectRisk('operativo')" class="risk-btn w-full glassmorphism rounded-xl p-4 text-left transition-all border border-transparent hover:border-white/10" data-risk="operativo">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 rounded-lg bg-gradient-to-br from-orange-500/20 to-orange-600/10 text-orange-400"><i data-lucide="factory" class="w-6 h-6"></i></div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-orange-400">Riesgo Operativo</h4>
+                                    <p class="text-xs text-gray-400">Emisiones</p>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-gray-500"></i>
+                            </div>
+                        </button>
+                        
+                        <button onclick="selectRisk('reputacional')" class="risk-btn w-full glassmorphism rounded-xl p-4 text-left transition-all border border-transparent hover:border-white/10" data-risk="reputacional">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 rounded-lg bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 text-yellow-400"><i data-lucide="message-square-warning" class="w-6 h-6"></i></div>
+                                <div class="flex-1">
+                                    <h4 class="font-medium text-yellow-400">Riesgo Reputacional</h4>
+                                    <p class="text-xs text-gray-400">ESG</p>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-4 h-4 text-gray-500"></i>
+                            </div>
+                        </button>
+                        
+                        <div class="glassmorphism rounded-xl p-4 mt-4">
+                            <h4 class="text-sm font-medium text-gray-400 mb-3">Métricas Clave de Riesgo</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-400">Asignación energías limpias</span>
+                                    <span class="text-sm font-bold text-red-400">1.4%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-400">Aumento emisiones 3T25</span>
+                                    <span class="text-sm font-bold text-orange-400">+15.4%</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-400">Meta reducción consumo</span>
+                                    <span class="text-sm font-bold text-green-400">6.1%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Detalle del riesgo -->
+                    <div class="col-span-2">
+                        <div id="risk-financiero" class="risk-detail glassmorphism rounded-2xl p-6">
+                            <div class="flex items-start gap-4 mb-6">
+                                <div class="p-4 rounded-xl bg-gradient-to-br from-red-500/20 to-red-600/10 text-red-400">
+                                    <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-bold text-red-400 mb-1">Riesgo Financiero</h3>
+                                    <p class="text-gray-400 text-sm">La limitada asignación presupuestal a energías limpias (1.4%) contrasta con la magnitud de la inversión requerida para la transición.</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="glassmorphism rounded-xl p-4">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <i data-lucide="trending-up" class="w-4 h-4 text-red-400"></i>
+                                        <span class="text-sm text-gray-400">Impacto</span>
+                                    </div>
+                                    <span class="text-lg font-bold text-red-400">Alto</span>
+                                </div>
+                                <div class="glassmorphism rounded-xl p-4">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <i data-lucide="alert-triangle" class="w-4 h-4 text-orange-400"></i>
+                                        <span class="text-sm text-gray-400">Probabilidad</span>
+                                    </div>
+                                    <span class="text-lg font-bold text-red-400">Alta</span>
+                                </div>
+                            </div>
+                            <div class="border-t border-white/10 pt-4">
+                                <h4 class="text-sm font-medium text-green-400 mb-3 flex items-center gap-2">
+                                    <i data-lucide="lightbulb" class="w-4 h-4"></i> Soluciones Propuestas
+                                </h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0"></i>
+                                        <span class="text-sm text-gray-300">Asociaciones público-privadas (APP)</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0"></i>
+                                        <span class="text-sm text-gray-300">Financiamiento climático internacional</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0"></i>
+                                        <span class="text-sm text-gray-300">Emisión de bonos sustentables</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0"></i>
+                                        <span class="text-sm text-gray-300">Reinversión de ahorros por eficiencia</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="risk-operativo" class="risk-detail glassmorphism rounded-2xl p-6 hidden">
+                            <div class="flex items-start gap-4 mb-6">
+                                <div class="p-4 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 text-orange-400">
+                                    <i data-lucide="factory" class="w-6 h-6"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-bold text-orange-400 mb-1">Riesgo Operativo</h3>
+                                    <p class="text-gray-400 text-sm">Las emisiones aumentaron 15.4% en 3T25, evidenciando la dificultad de desacoplar crecimiento productivo de impacto ambiental.</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="glassmorphism rounded-xl p-4">
+                                    <span class="text-sm text-gray-400">Impacto</span>
+                                    <p class="text-lg font-bold text-red-400">Alto</p>
+                                </div>
+                                <div class="glassmorphism rounded-xl p-4">
+                                    <span class="text-sm text-gray-400">Probabilidad</span>
+                                    <p class="text-lg font-bold text-yellow-400">Media</p>
+                                </div>
+                            </div>
+                            <div class="border-t border-white/10 pt-4">
+                                <h4 class="text-sm font-medium text-green-400 mb-3">Soluciones Propuestas</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5"></i>
+                                        <span class="text-sm text-gray-300">Programa reducción metano con Banco Mundial</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5"></i>
+                                        <span class="text-sm text-gray-300">Inversiones en infraestructura de captura</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5"></i>
+                                        <span class="text-sm text-gray-300">Monitoreo en tiempo real de emisiones</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5"></i>
+                                        <span class="text-sm text-gray-300">Metas vinculantes por unidad operativa</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="risk-reputacional" class="risk-detail glassmorphism rounded-2xl p-6 hidden">
+                            <div class="flex items-start gap-4 mb-6">
+                                <div class="p-4 rounded-xl bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 text-yellow-400">
+                                    <i data-lucide="message-square-warning" class="w-6 h-6"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-xl font-bold text-yellow-400 mb-1">Riesgo Reputacional</h3>
+                                    <p class="text-gray-400 text-sm">La brecha entre compromisos y desempeño real puede generar activismo de accionistas e inversionistas, especialmente si Pemex busca financiamiento ESG.</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="glassmorphism rounded-xl p-4">
+                                    <span class="text-sm text-gray-400">Impacto</span>
+                                    <p class="text-lg font-bold text-yellow-400">Medio</p>
+                                </div>
+                                <div class="glassmorphism rounded-xl p-4">
+                                    <span class="text-sm text-gray-400">Probabilidad</span>
+                                    <p class="text-lg font-bold text-yellow-400">Media</p>
+                                </div>
+                            </div>
+                            <div class="border-t border-white/10 pt-4">
+                                <h4 class="text-sm font-medium text-green-400 mb-3">Soluciones Propuestas</h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5"></i>
+                                        <span class="text-sm text-gray-300">Transparencia en reportes de sostenibilidad</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5"></i>
+                                        <span class="text-sm text-gray-300">Cumplimiento verificable de compromisos</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5"></i>
+                                        <span class="text-sm text-gray-300">Comunicación proactiva de avances</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-green-400 mt-0.5"></i>
+                                        <span class="text-sm text-gray-300">Certificaciones internacionales</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recomendación final -->
+                <div class="mt-6 glassmorphism rounded-2xl p-6 border border-green-500/20">
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/10">
+                            <i data-lucide="shield" class="w-8 h-8 text-green-400"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-green-400 mb-2">Recomendación del Grupo Multidisciplinario</h4>
+                            <p class="text-gray-300 text-sm mb-4">Establecer un <strong>Comité de Transición Energética</strong> con participación de SENER, CFE, LitioMX y banca de desarrollo, que evalúe semestralmente avances y reasigne recursos hacia las iniciativas con mayor viabilidad técnico-económica.</p>
+                            <div class="flex items-center gap-6 text-xs text-gray-400">
+                                <span class="flex items-center gap-1"><i data-lucide="building" class="w-4 h-4"></i> SENER</span>
+                                <span class="flex items-center gap-1"><i data-lucide="zap" class="w-4 h-4"></i> CFE</span>
+                                <span class="flex items-center gap-1"><i data-lucide="gem" class="w-4 h-4"></i> LitioMX</span>
+                                <span class="flex items-center gap-1"><i data-lucide="globe" class="w-4 h-4"></i> Banca de Desarrollo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            // Show selected section
+            document.getElementById('section-' + sectionId).classList.add('active');
+            
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.classList.remove('active', 'text-green-400');
+                btn.classList.add('text-gray-400');
+            });
+            const activeBtn = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active', 'text-green-400');
+                activeBtn.classList.remove('text-gray-400');
+            }
+        }
+        
+        // Toggle vector expansion
+        function toggleVector(vectorId) {
+            const content = document.getElementById('content-' + vectorId);
+            const chevron = document.getElementById('chevron-' + vectorId);
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                chevron.style.transform = 'rotate(0deg)';
+            } else {
+                // Close all others
+                document.querySelectorAll('.expand-content').forEach(c => c.classList.remove('expanded'));
+                document.querySelectorAll('[id^="chevron-"]').forEach(c => c.style.transform = 'rotate(0deg)');
+                // Open this one
+                content.classList.add('expanded');
+                chevron.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        // Select risk
+        function selectRisk(riskId) {
+            // Hide all risk details
+            document.querySelectorAll('.risk-detail').forEach(d => d.classList.add('hidden'));
+            // Show selected
+            document.getElementById('risk-' + riskId).classList.remove('hidden');
+            
+            // Update buttons
+            document.querySelectorAll('.risk-btn').forEach(btn => {
+                btn.classList.remove('border-white/20', 'shadow-lg');
+                btn.classList.add('border-transparent');
+                btn.querySelector('[data-lucide="chevron-right"]').classList.remove('text-white');
+                btn.querySelector('[data-lucide="chevron-right"]').classList.add('text-gray-500');
+            });
+            const activeBtn = document.querySelector(`.risk-btn[data-risk="${riskId}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('border-white/20', 'shadow-lg');
+                activeBtn.classList.remove('border-transparent');
+                activeBtn.querySelector('[data-lucide="chevron-right"]').classList.add('text-white');
+                activeBtn.querySelector('[data-lucide="chevron-right"]').classList.remove('text-gray-500');
+            }
+        }
+    </script>
+</body>
+</html>
